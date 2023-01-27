@@ -14,22 +14,64 @@ public class Main {
 
     private static void checkStaus(char[][] poleArray) {
 
-        int statusX = 0;
-        int statusY = 0;
+        int countX = 0;
+        int countO = 0;
+        boolean statusX = false;
+        boolean statusO = false;
+        StringBuilder result = new StringBuilder("Draw");
 
+        // Count X,Y,_
         for (int i = 0; i < poleArray.length; i++) {
             for (int j = 0; j < poleArray[i].length; j++) {
+
                 if (poleArray[i][j] == 'O') {
-                    statusY++;
+                    countO++;
                 } else if (poleArray[i][j] == 'X') {
-                    statusX++;
+                    countX++;
                 }
-
             }
-
         }
 
-        System.out.printf("X %d, Y %d", statusX, statusY);
+        // Check Win X
+        if ((poleArray[0][0] == 'X' && poleArray[0][1] == 'X' && poleArray[0][2] == 'X')
+                || (poleArray[1][0] == 'X' && poleArray[1][1] == 'X' && poleArray[1][2] == 'X')
+                || (poleArray[2][0] == 'X' && poleArray[2][1] == 'X' && poleArray[2][2] == 'X')
+
+                || (poleArray[0][0] == 'X' && poleArray[1][0] == 'X' && poleArray[2][0] == 'X')
+                || (poleArray[0][1] == 'X' && poleArray[1][1] == 'X' && poleArray[2][1] == 'X')
+                || (poleArray[0][2] == 'X' && poleArray[1][2] == 'X' && poleArray[2][2] == 'X')
+
+                || (poleArray[0][0] == 'X' && poleArray[1][1] == 'X' && poleArray[2][2] == 'X')
+                || (poleArray[0][2] == 'X' && poleArray[1][1] == 'X' && poleArray[2][0] == 'X')
+        ) statusX = true;
+
+        // Check Win O
+        if ((poleArray[0][0] == 'O' && poleArray[0][1] == 'O' && poleArray[0][2] == 'O')
+                || (poleArray[1][0] == 'O' && poleArray[1][1] == 'O' && poleArray[1][2] == 'O')
+                || (poleArray[2][0] == 'O' && poleArray[2][1] == 'O' && poleArray[2][2] == 'O')
+
+                || (poleArray[0][0] == 'O' && poleArray[1][0] == 'O' && poleArray[2][0] == 'O')
+                || (poleArray[0][1] == 'O' && poleArray[1][1] == 'O' && poleArray[2][1] == 'O')
+                || (poleArray[0][2] == 'O' && poleArray[1][2] == 'O' && poleArray[2][2] == 'O')
+
+                || (poleArray[0][0] == 'O' && poleArray[1][1] == 'O' && poleArray[2][2] == 'O')
+                || (poleArray[0][2] == 'O' && poleArray[1][1] == 'O' && poleArray[2][0] == 'O')
+        ) statusO = true;
+
+
+        // Check Impossible: error queue or 2win
+        if (countX >= countO + 2 || countO >= countX + 2 || statusX && statusO) {
+            result.replace(0, result.length(), "Impossible");
+        } else if (statusX) {
+            result.replace(0, result.length(), "X wins");
+        } else if (statusO) {
+            result.replace(0, result.length(), "O wins");
+        } else if (countX + countO < 9) {
+            result.replace(0, result.length(), "Game not finished");
+        }
+
+        // Result
+        System.out.print(result);
     }
 
     private static void inputData(char[][] poleArray) {

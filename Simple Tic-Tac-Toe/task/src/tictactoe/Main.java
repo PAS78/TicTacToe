@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 public class Main {
 
+    public static int superCount = 0;
+
     public static void main(String[] args) {
 
         char[][] poleArray = new char[3][3];
@@ -71,7 +73,59 @@ public class Main {
         }
 
         // Result
-        System.out.print(result);
+//        System.out.println(result);
+
+        if (countX + countO != 9) {
+            selectHod(poleArray);
+        } else System.out.print("X wins");
+    }
+
+    private static void selectHod(char[][] poleArray) {
+
+        System.out.print("> ");
+
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+
+        if (checkUserInput(input, poleArray)) {
+            printPole(poleArray);
+        } else selectHod(poleArray);
+
+    }
+
+    private static boolean checkUserInput(String input, char[][] poleArray) {
+        String[] words = input.trim().split(" ");
+        int index1;
+        int index2;
+
+        // Check on Length (whait 2 digit)
+        if (words.length != 2) {
+            System.out.println("You should enter numbers!");
+            return false;
+        } else
+            // Check on Int
+            if (words[0].matches("[-+]?\\d+") || words[1].matches("[-+]?\\d+")) {
+                index1 = Integer.parseInt(words[0]);
+                index2 = Integer.parseInt(words[1]);
+            } else {
+                System.out.println("You should enter numbers!");
+                return false;
+            }
+
+        // Check on Range
+        if (index1 < 1 || index1 > 3 || index2 < 1 || index2 > 3) {
+            System.out.println("Coordinates should be from 1 to 3!");
+            return false;
+        }
+
+        // Check Busy
+        if (poleArray[index1 - 1][index2 - 1] != '_') {
+            System.out.println("This cell is occupied! Choose another one!");
+            return false;
+        } else {
+            poleArray[index1 - 1][index2 - 1] = 'X';
+            return true;
+        }
     }
 
     private static void inputData(char[][] poleArray) {
@@ -105,9 +159,9 @@ public class Main {
             }
 
         }
+        superCount++;
         System.out.println("---------");
-        checkStaus(poleArray);
+        if (superCount < 2) checkStaus(poleArray);
     }
-
 
 }
